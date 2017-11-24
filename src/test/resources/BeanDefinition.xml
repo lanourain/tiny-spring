@@ -3,7 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="beanDemo" class="BeanDemo" />
+    <bean id="beanDemo" class="BeanDemo">
+        <property name="name" value="first beanDemo"/>
+        <property name="sex" value="male"/>
+    </bean>
 
-    <bean id="beanDemo2" class="BeanDemo2" />
+    <bean id="beanDemo2" class="BeanDemo2"/>
 </beans>

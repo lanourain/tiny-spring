@@ -1,4 +1,6 @@
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -52,8 +54,12 @@ public class XmlBeanFactory {
     protected void processBeanDefinition(Element ele) {
         String name = ele.getAttribute("id");
         String className = ele.getAttribute("class");
+        // 创建注册到factory中的BeanDefinition信息
         BeanDefinition beanDefinition = new BeanDefinition();
+        // 处理BeanDefinition的属性
+        processProperty(ele, beanDefinition);
         beanDefinition.setBeanClassName(className);
+        // factory通过map存放BeanDefinition
         registry.put(name, beanDefinition);
     }
 
@@ -63,6 +69,45 @@ public class XmlBeanFactory {
         if (beanDefinition == null) {
             throw new IllegalArgumentException("No bean named " + name + " is defined");
         }
-        return Class.forName(beanDefinition.getBeanClassName()).newInstance();
+        // 通过类名获取实例
+        Object bean = Class.forName(beanDefinition.getBeanClassName()).newInstance();
+        applyPropertyValues(bean, beanDefinition);
+        return bean;
+    }
+
+    // 获取Property并记录到对应BeanDefinition中
+    private void processProperty(Element ele, BeanDefinition beanDefinition) {
+        NodeList propertyNode = ele.getElementsByTagName("property");
+        for (int i = 0; i < propertyNode.getLength(); i++) {
+            Node node = propertyNode.item(i);
+            if (node instanceof Element) {
+                Element propertyEle = (Element) node;
+                String name = propertyEle.getAttribute("name");
+                String value = propertyEle.getAttribute("value");
+                if (value != null && value.length() > 0) {
+                    beanDefinition.getPropertyValues().add(new PropertyValue(name, value));
+                }
+            }
+        }
+    }
+
+    // 初始化bean时，将属性注入进去
+    private void applyPropertyValues(Object bean, BeanDefinition beanDefinition) throws Exception {
+        for (PropertyValue propertyValue : beanDefinition.getPropertyValues()) {
+            Object value = propertyValue.getValue();
+            // 使用反射将属性注入
+            try {
+                Method declaredMethod = bean.getClass().getDeclaredMethod(
+                        "set" + propertyValue.getName().substring(0, 1).toUpperCase()
+                                + propertyValue.getName().substring(1), value.getClass());
+                declaredMethod.setAccessible(true);
+
+                declaredMethod.invoke(bean, value);
+            } catch (NoSuchMethodException e) {
+                Field declaredField = bean.getClass().getDeclaredField(propertyValue.getName());
+                declaredField.setAccessible(true);
+                declaredField.set(bean, value);
+            }
+        }
     }
 }
