@@ -18,6 +18,8 @@
 1. 通过XML property元素支持bean的string属性注入
     1. BeanDefinition中新增list propertyValues，记录需要注入的属性（name，value，暂时只支持string类型）
     2. 解析xml获取配置信息存入propertyValues
+    3. 通过BeanDefinition获取bean实例的时候，通过反射将属性set进去
+    
     
 
 
