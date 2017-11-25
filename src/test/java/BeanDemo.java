@@ -5,6 +5,8 @@ public class BeanDemo {
 
     private BeanDemo2 refBean;
 
+    private long age;
+
     public String getSex() {
         return sex;
     }
@@ -27,5 +29,13 @@ public class BeanDemo {
 
     public void setRefBean(BeanDemo2 refBean) {
         this.refBean = refBean;
+    }
+
+    public long getAge() {
+        return age;
+    }
+
+    public void setAge(long age) {
+        this.age = age;
     }
 }

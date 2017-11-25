@@ -1,5 +1,4 @@
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
@@ -91,8 +90,9 @@ public class XmlBeanFactory {
                     // 处理ref的情况
                     String ref = propertyEle.getAttribute("ref");
                     if (ref == null || ref.length() == 0) {
-                        throw new IllegalArgumentException("Configuration problem: <property> element for property '"
-                                + name + "' must specify a ref or value");
+                        throw new IllegalArgumentException(
+                                "Configuration problem: <property> element for property '"
+                                        + name + "' must specify a ref or value");
                     }
                     // 先只是记录ref 引用的名字，后续需要的时候才进行解析
                     BeanReference beanReference = new BeanReference(ref);
@@ -104,6 +104,12 @@ public class XmlBeanFactory {
 
     // 初始化bean时，将属性注入进去
     private void applyPropertyValues(Object bean, BeanDefinition beanDefinition) throws Exception {
+        Method[] methods = bean.getClass().getMethods();
+        Map<String, Method> methodMap = new HashMap<String, Method>();
+        for (Method method : methods) {
+            methodMap.put(method.getName(), method);
+        }
+
         for (PropertyValue propertyValue : beanDefinition.getPropertyValues()) {
             Object value = propertyValue.getValue();
 
@@ -114,18 +120,18 @@ public class XmlBeanFactory {
             }
 
             // 使用反射将属性注入
-            try {
-                Method declaredMethod = bean.getClass().getDeclaredMethod(
-                        "set" + propertyValue.getName().substring(0, 1).toUpperCase()
-                                + propertyValue.getName().substring(1), value.getClass());
-                declaredMethod.setAccessible(true);
+            String methodName = "set" + propertyValue.getName().substring(0, 1).toUpperCase()
+                    + propertyValue.getName().substring(1);
 
-                declaredMethod.invoke(bean, value);
-            } catch (NoSuchMethodException e) {
-                Field declaredField = bean.getClass().getDeclaredField(propertyValue.getName());
-                declaredField.setAccessible(true);
-                declaredField.set(bean, value);
+            Method method = methodMap.get(methodName);
+
+            // 根据反射获取方法的参数类型，然后将value转换成对应类型
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes[0] == long.class) {
+                value = Long.valueOf(value.toString());
             }
+
+            method.invoke(bean, value);
         }
     }
 }

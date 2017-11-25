@@ -23,6 +23,8 @@
     1. 使用BeanReference记录引用的beanName，和value做区分
     2. 在实例化bean时，使用记录的beanName通过getBean从容器中获取引用的bean实例
     ianqtyingyong 
+3. property元素支持long类型的属性支持
+    1. 通过反射根据set method的参数，将propertyValue中的value转换成对应类型注入属性
     
 
 

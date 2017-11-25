@@ -20,6 +20,7 @@ public class XmlBeanFactoryTest {
         // FIXME 从容器中获取的bean是单例实现
         //assertEquals(beanDemo2, beanDemo.getRefBean());
         assertEquals("second beanDemo", beanDemo.getRefBean().getName());
+        assertEquals(5L, beanDemo.getAge());
 
     }
 }

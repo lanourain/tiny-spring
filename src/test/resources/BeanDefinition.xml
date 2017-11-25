@@ -7,6 +7,7 @@
         <property name="name" value="first beanDemo"/>
         <property name="sex" value="male"/>
         <property name="refBean" ref="beanDemo2"/>
+        <property name="age" value="5"/>
     </bean>
 
     <bean id="beanDemo2" class="BeanDemo2">
