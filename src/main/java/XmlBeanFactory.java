@@ -87,6 +87,17 @@ public class XmlBeanFactory {
                 if (value != null && value.length() > 0) {
                     beanDefinition.getPropertyValues().add(new PropertyValue(name, value));
                 }
+                else {
+                    // 处理ref的情况
+                    String ref = propertyEle.getAttribute("ref");
+                    if (ref == null || ref.length() == 0) {
+                        throw new IllegalArgumentException("Configuration problem: <property> element for property '"
+                                + name + "' must specify a ref or value");
+                    }
+                    // 先只是记录ref 引用的名字，后续需要的时候才进行解析
+                    BeanReference beanReference = new BeanReference(ref);
+                    beanDefinition.getPropertyValues().add(new PropertyValue(name, beanReference));
+                }
             }
         }
     }
@@ -95,6 +106,13 @@ public class XmlBeanFactory {
     private void applyPropertyValues(Object bean, BeanDefinition beanDefinition) throws Exception {
         for (PropertyValue propertyValue : beanDefinition.getPropertyValues()) {
             Object value = propertyValue.getValue();
+
+            // ref 引用其他bean的情况，则通过getBean再从容器中获取对应的bean
+            if (value instanceof BeanReference) {
+                BeanReference beanReference = (BeanReference) value;
+                value = getBean(beanReference.getName());
+            }
+
             // 使用反射将属性注入
             try {
                 Method declaredMethod = bean.getClass().getDeclaredMethod(

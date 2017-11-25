@@ -19,7 +19,10 @@
     1. BeanDefinition中新增list propertyValues，记录需要注入的属性（name，value，暂时只支持string类型）
     2. 解析xml获取配置信息存入propertyValues
     3. 通过BeanDefinition获取bean实例的时候，通过反射将属性set进去
-    
+2. property元素支持引用其他bean的属性注入
+    1. 使用BeanReference记录引用的beanName，和value做区分
+    2. 在实例化bean时，使用记录的beanName通过getBean从容器中获取引用的bean实例
+    ianqtyingyong 
     
 
 

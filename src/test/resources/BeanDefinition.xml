@@ -6,7 +6,11 @@
     <bean id="beanDemo" class="BeanDemo">
         <property name="name" value="first beanDemo"/>
         <property name="sex" value="male"/>
+        <property name="refBean" ref="beanDemo2"/>
     </bean>
 
-    <bean id="beanDemo2" class="BeanDemo2"/>
+    <bean id="beanDemo2" class="BeanDemo2">
+        <property name="name" value="second beanDemo"/>
+    </bean>
+
 </beans>

@@ -3,6 +3,8 @@ public class BeanDemo {
 
     private String sex;
 
+    private BeanDemo2 refBean;
+
     public String getSex() {
         return sex;
     }
@@ -17,5 +19,13 @@ public class BeanDemo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BeanDemo2 getRefBean() {
+        return refBean;
+    }
+
+    public void setRefBean(BeanDemo2 refBean) {
+        this.refBean = refBean;
     }
 }

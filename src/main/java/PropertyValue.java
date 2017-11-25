@@ -5,6 +5,10 @@ public class PropertyValue {
 
     private String name;
 
+    /**
+     * value = BeanReference类型时，表示是ref的属性，引用别的bean
+     * 其他类型则是非bean的value
+     */
     private Object value;
 
     public PropertyValue(String name, Object value) {
