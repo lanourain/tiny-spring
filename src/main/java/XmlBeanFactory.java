@@ -68,9 +68,16 @@ public class XmlBeanFactory {
         if (beanDefinition == null) {
             throw new IllegalArgumentException("No bean named " + name + " is defined");
         }
-        // 通过类名获取实例
-        Object bean = Class.forName(beanDefinition.getBeanClassName()).newInstance();
-        applyPropertyValues(bean, beanDefinition);
+
+        Object bean = beanDefinition.getBean();
+        if (bean == null) {
+            // Bean未实例化过的情况，通过类名获取实例
+            bean = Class.forName(beanDefinition.getBeanClassName()).newInstance();
+            // BeanDefinition中记录实例化的单例bean
+            beanDefinition.setBean(bean);
+            // 填充属性
+            applyPropertyValues(bean, beanDefinition);
+        }
         return bean;
     }
 

@@ -17,9 +17,11 @@ public class XmlBeanFactoryTest {
         assertEquals("male", beanDemo.getSex());
         // 检验ref 是否注入
         assertNotNull(beanDemo.getRefBean());
-        // FIXME 从容器中获取的bean是单例实现
-        //assertEquals(beanDemo2, beanDemo.getRefBean());
+        // 检验从容器中获取的bean是单例
+        assertEquals(beanDemo2, beanDemo.getRefBean());
+        // 检验ref是否正常
         assertEquals("second beanDemo", beanDemo.getRefBean().getName());
+        // 检验long类型property是否能注入
         assertEquals(5L, beanDemo.getAge());
 
     }

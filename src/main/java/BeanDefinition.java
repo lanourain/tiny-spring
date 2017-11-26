@@ -6,6 +6,9 @@ import java.util.List;
  */
 public class BeanDefinition {
 
+    // BeanDefinition对应的bean 单例实例
+    private Object bean;
+
     private String beanClassName;
 
     // bean 属性信息
@@ -25,5 +28,13 @@ public class BeanDefinition {
 
     public void setPropertyValues(List<PropertyValue> propertyValues) {
         this.propertyValues = propertyValues;
+    }
+
+    public Object getBean() {
+        return bean;
+    }
+
+    public void setBean(Object bean) {
+        this.bean = bean;
     }
 }
