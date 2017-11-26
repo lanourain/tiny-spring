@@ -19,6 +19,7 @@ public class XmlBeanFactoryTest {
         assertNotNull(beanDemo.getRefBean());
         // 检验从容器中获取的bean是单例
         assertEquals(beanDemo2, beanDemo.getRefBean());
+        assertEquals(beanDemo2, beanDemo2.getSelfBean());
         // 检验ref是否正常
         assertEquals("second beanDemo", beanDemo.getRefBean().getName());
         // 检验long类型property是否能注入

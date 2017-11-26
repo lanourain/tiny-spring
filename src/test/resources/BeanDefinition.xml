@@ -13,6 +13,7 @@
     <bean id="beanDemo2" class="BeanDemo2">
         <property name="name" value="second beanDemo"/>
         <property name="refBean" ref="beanDemo"/>
+        <property name="selfBean" ref="beanDemo2"/>
     </bean>
 
 </beans>

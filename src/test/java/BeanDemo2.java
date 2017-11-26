@@ -3,6 +3,8 @@ public class BeanDemo2 {
 
     private BeanDemo refBean;
 
+    private BeanDemo2 selfBean;
+
     public String getName() {
         return name;
     }
@@ -17,5 +19,13 @@ public class BeanDemo2 {
 
     public void setRefBean(BeanDemo refBean) {
         this.refBean = refBean;
+    }
+
+    public BeanDemo2 getSelfBean() {
+        return selfBean;
+    }
+
+    public void setSelfBean(BeanDemo2 selfBean) {
+        this.selfBean = selfBean;
     }
 }
